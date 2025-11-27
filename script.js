@@ -1,4 +1,3 @@
-// Get all cards and forms
 const cards = document.querySelectorAll('.card');
 const wifiForm = document.getElementById('wifi-form');
 const urlForm = document.getElementById('url-form');
@@ -6,22 +5,16 @@ const generateBtn = document.getElementById('generate-btn');
 const wifiSecurity = document.getElementById('wifi-security');
 const wifiPassword = document.getElementById('wifi-password');
 
-// Current selected type
 let selectedType = 'wifi';
 
-// Card selection handler
 cards.forEach(card => {
     card.addEventListener('click', () => {
-        // Remove active class from all cards
         cards.forEach(c => c.classList.remove('active'));
 
-        // Add active class to clicked card
         card.classList.add('active');
 
-        // Get the selected type
         selectedType = card.getAttribute('data-type');
 
-        // Show/hide appropriate form
         if (selectedType === 'wifi') {
             wifiForm.classList.add('active');
             urlForm.classList.remove('active');
@@ -32,7 +25,6 @@ cards.forEach(card => {
     });
 });
 
-// Password visibility toggle
 const toggleButtons = document.querySelectorAll('.toggle-password');
 toggleButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -53,7 +45,6 @@ toggleButtons.forEach(button => {
     });
 });
 
-// Security type change handler - disable password for "No Password"
 wifiSecurity.addEventListener('change', () => {
     if (wifiSecurity.value === 'nopass') {
         wifiPassword.disabled = true;
@@ -67,7 +58,6 @@ wifiSecurity.addEventListener('change', () => {
     }
 });
 
-// Modal elements
 const modal = document.getElementById('preview-modal');
 const closeModal = document.querySelector('.close');
 const qrDisplay = document.getElementById('qr-display');
@@ -84,7 +74,6 @@ let currentQRData = '';
 let currentType = '';
 let currentDetails = {};
 
-// Generate button handler
 generateBtn.addEventListener('click', () => {
     if (selectedType === 'wifi') {
         const ssid = document.getElementById('wifi-ssid').value.trim();
@@ -101,7 +90,6 @@ generateBtn.addEventListener('click', () => {
             return;
         }
 
-        // Create Wi-Fi QR code string format
         const securityType = security === 'nopass' ? 'nopass' : security;
         const wifiString = `WIFI:T:${securityType};S:${ssid};P:${password};;`;
 
@@ -117,7 +105,6 @@ generateBtn.addEventListener('click', () => {
             return;
         }
 
-        // Basic URL validation
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
             alert('Please include "http://" or "https://" in your URL.');
             return;
@@ -128,16 +115,12 @@ generateBtn.addEventListener('click', () => {
     }
 });
 
-// Function to generate QR code
 function generateQRCode(data, type) {
-    // Clear previous QR code
     qrDisplay.innerHTML = '';
 
-    // Store current data
     currentQRData = data;
     currentType = type;
 
-    // Generate new QR code
     new QRCode(qrDisplay, {
         text: data,
         width: 256,
@@ -147,22 +130,18 @@ function generateQRCode(data, type) {
         correctLevel: QRCode.CorrectLevel.L
     });
 
-    // Update modal content based on type
     if (type === 'wifi') {
         updateWiFiPreview();
     } else if (type === 'url') {
         updateURLPreview();
     }
 
-    // Show modal
     modal.style.display = 'block';
 }
 
-// Update preview for Wi-Fi
 function updateWiFiPreview() {
     modalTitle.textContent = 'Your Wi-Fi QR Code is Ready!';
 
-    // Wi-Fi icon
     pdfIcon.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
@@ -175,7 +154,6 @@ function updateWiFiPreview() {
     pdfCardTitle.textContent = 'Connect to Wi-Fi';
     pdfMainText.textContent = currentDetails.ssid;
 
-    // Details section
     let detailsHTML = '';
     if (currentDetails.security !== 'nopass' && currentDetails.password) {
         detailsHTML = `
@@ -190,11 +168,9 @@ function updateWiFiPreview() {
     pdfInstruction.textContent = 'Scan to connect automatically';
 }
 
-// Update preview for URL
 function updateURLPreview() {
     modalTitle.textContent = 'Your Website QR Code is Ready!';
 
-    // Globe icon
     pdfIcon.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
@@ -206,7 +182,6 @@ function updateURLPreview() {
     pdfCardTitle.textContent = 'Scan to Visit';
     pdfMainText.textContent = currentDetails.title || currentDetails.url;
 
-    // Details section - show full URL
     pdfDetails.innerHTML = `
         <div class="pdf-url-full">${currentDetails.url}</div>
     `;
@@ -214,7 +189,6 @@ function updateURLPreview() {
     pdfInstruction.textContent = 'Scan to open the website';
 }
 
-// Close modal handlers
 closeModal.addEventListener('click', () => {
     modal.style.display = 'none';
 });
@@ -225,17 +199,14 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Create new QR code button
 createNewBtn.addEventListener('click', () => {
     modal.style.display = 'none';
-    // Optionally reset forms
     document.getElementById('wifi-ssid').value = '';
     document.getElementById('wifi-password').value = '';
     document.getElementById('website-url').value = '';
     document.getElementById('custom-title').value = '';
 });
 
-// Download PDF
 downloadPdfBtn.addEventListener('click', () => {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
@@ -253,13 +224,11 @@ downloadPdfBtn.addEventListener('click', () => {
     const pageHeight = pdf.internal.pageSize.getHeight();
 
     if (currentType === 'wifi') {
-        // White background
         pdf.setFillColor(255, 255, 255);
         pdf.rect(0, 0, pageWidth, pageHeight, 'F');
 
         let yPos = 55;
 
-        // Title with website style
         pdf.setFontSize(44);
         pdf.setFont('helvetica', 'bold');
         pdf.setTextColor(102, 126, 234);
@@ -267,7 +236,6 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += 20;
 
-        // Network name
         pdf.setFontSize(34);
         pdf.setFont('helvetica', 'bold');
         pdf.setTextColor(51, 51, 51);
@@ -275,15 +243,12 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += 25;
 
-        // QR Code with gradient border
         const qrSize = 95;
         const qrX = (pageWidth - qrSize) / 2;
 
-        // Outer gradient border
         pdf.setFillColor(102, 126, 234);
         pdf.roundedRect(qrX - 6, yPos - 6, qrSize + 12, qrSize + 12, 6, 6, 'F');
 
-        // Inner white background
         pdf.setFillColor(255, 255, 255);
         pdf.roundedRect(qrX - 3, yPos - 3, qrSize + 6, qrSize + 6, 4, 4, 'F');
 
@@ -291,13 +256,10 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += qrSize + 22;
 
-        // Password section with gradient accent
         if (currentDetails.security !== 'nopass' && currentDetails.password) {
-            // Gradient background box
             pdf.setFillColor(240, 242, 255);
             pdf.roundedRect(25, yPos - 10, pageWidth - 50, 32, 8, 8, 'F');
 
-            // Gradient left accent bar
             pdf.setFillColor(102, 126, 234);
             pdf.roundedRect(25, yPos - 10, 4, 32, 2, 2, 'F');
 
@@ -318,7 +280,6 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += 8;
 
-        // Instructions
         pdf.setFontSize(13);
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(102, 102, 102);
@@ -326,7 +287,6 @@ downloadPdfBtn.addEventListener('click', () => {
         yPos += 6;
         pdf.text('to connect to the Wi-Fi network automatically', pageWidth / 2, yPos, { align: 'center' });
 
-        // Simple footer
         pdf.setFontSize(9);
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(150, 150, 150);
@@ -336,13 +296,11 @@ downloadPdfBtn.addEventListener('click', () => {
         pdf.save(filename);
 
     } else if (currentType === 'url') {
-        // White background
         pdf.setFillColor(255, 255, 255);
         pdf.rect(0, 0, pageWidth, pageHeight, 'F');
 
         let yPos = 55;
 
-        // Title with website style
         pdf.setFontSize(44);
         pdf.setFont('helvetica', 'bold');
         pdf.setTextColor(102, 126, 234);
@@ -350,7 +308,6 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += 20;
 
-        // Website title/name
         const displayText = currentDetails.title || currentDetails.url;
         const splitTitle = pdf.splitTextToSize(displayText, pageWidth - 50);
 
@@ -361,15 +318,12 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += splitTitle.length * 10 + 18;
 
-        // QR Code with gradient border
         const qrSize = 95;
         const qrX = (pageWidth - qrSize) / 2;
 
-        // Outer gradient border
         pdf.setFillColor(102, 126, 234);
         pdf.roundedRect(qrX - 6, yPos - 6, qrSize + 12, qrSize + 12, 6, 6, 'F');
 
-        // Inner white background
         pdf.setFillColor(255, 255, 255);
         pdf.roundedRect(qrX - 3, yPos - 3, qrSize + 6, qrSize + 6, 4, 4, 'F');
 
@@ -377,11 +331,9 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += qrSize + 22;
 
-        // URL display with gradient accent
         pdf.setFillColor(240, 242, 255);
         pdf.roundedRect(25, yPos - 8, pageWidth - 50, 28, 8, 8, 'F');
 
-        // Gradient left accent bar
         pdf.setFillColor(102, 126, 234);
         pdf.roundedRect(25, yPos - 8, 4, 28, 2, 2, 'F');
 
@@ -393,7 +345,6 @@ downloadPdfBtn.addEventListener('click', () => {
 
         yPos += 32;
 
-        // Instructions
         pdf.setFontSize(13);
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(102, 102, 102);
@@ -401,7 +352,6 @@ downloadPdfBtn.addEventListener('click', () => {
         yPos += 6;
         pdf.text('to open this website in your browser', pageWidth / 2, yPos, { align: 'center' });
 
-        // Simple footer
         pdf.setFontSize(9);
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(150, 150, 150);
