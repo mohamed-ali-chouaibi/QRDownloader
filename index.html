@@ -14,7 +14,6 @@
         </header>
 
         <main>
-            <!-- Step 1: Select QR Code Type -->
             <section class="step-section">
                 <h2>Step 1: Select QR Code Type</h2>
                 <div class="card-container">
@@ -44,11 +43,9 @@
                 </div>
             </section>
 
-            <!-- Step 2: Dynamic Input Form -->
             <section class="step-section">
                 <h2>Step 2: Enter Your Details</h2>
                 
-                <!-- Wi-Fi Form -->
                 <form id="wifi-form" class="input-form active">
                     <h3>Enter Your Network Details</h3>
                     
@@ -84,7 +81,6 @@
                     </div>
                 </form>
 
-                <!-- URL Form -->
                 <form id="url-form" class="input-form">
                     <h3>Enter Your Website Details</h3>
                     
@@ -116,17 +112,14 @@
         </footer>
     </div>
 
-    <!-- QR Code Preview Modal -->
     <div id="preview-modal" class="modal">
         <div class="modal-content-large">
             <span class="close">&times;</span>
             <h2 id="modal-title">Your Wi-Fi QR Code is Ready!</h2>
             
-            <!-- PDF Preview Card -->
             <div class="pdf-preview-card" id="pdf-preview">
                 <div class="pdf-card-header">
                     <div class="pdf-icon" id="pdf-icon">
-                        <!-- Icon will be inserted here -->
                     </div>
                 </div>
                 
@@ -137,14 +130,12 @@
                     <div class="qr-code-container" id="qr-display"></div>
                     
                     <div class="pdf-details" id="pdf-details">
-                        <!-- Dynamic details will be inserted here -->
                     </div>
                     
                     <p class="pdf-instruction" id="pdf-instruction">Scan to connect automatically</p>
                 </div>
             </div>
             
-            <!-- Action Buttons -->
             <div class="action-buttons">
                 <button class="primary-btn" id="download-pdf-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
